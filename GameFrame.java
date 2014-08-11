@@ -1,21 +1,30 @@
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 
+@SuppressWarnings("serial")
 public class GameFrame extends JFrame{
-	public static String title = "The Game";
 	public static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	public static int screenHeight = (int) screenSize.getHeight();
-	public static int screenWidth = (int) screenSize.getWidth();
-	
+	public static double screenWidth = screenSize.getWidth();
+	public static double screenHeight = screenSize.getHeight();
 	
 	public GameFrame(){
-		setVisible(true);
-		setTitle(title);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, screenWidth, screenHeight);
-		add(new GamePanel(screenWidth, screenHeight));
+		super("The Game");
+		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+		setSize((int)screenWidth, (int)screenHeight);
+		final GamePanel panel = new GamePanel(this.getWidth(), this.getHeight());
+		this.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                panel.setFrameWidth(getWidth());
+                panel.setFrameHeight(getHeight());
+            }
+        });
+		this.add(panel);
 	}
 	
 }
