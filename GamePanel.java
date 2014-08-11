@@ -1,6 +1,7 @@
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -19,18 +20,22 @@ import java.util.Random;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements MouseListener, MouseMotionListener, ActionListener{
-	private static int height = 400;
-	private static int width = 400;
+	private static int mapHeight = 1000;
+	private static int mapWidth = 1000;
 	private static Image Dirt, Ocean, Grass;
-	private static Tile[][] tiles = new Tile[height][width];
+	private static Tile[][] tiles = new Tile[mapHeight][mapWidth];
 	public static int screenWidth, screenHeight;
 	private Point mousePoint;
 	private int screenx, screeny, mag = 20;
+	private String[] baseBiomes = {"Jungle", "Plains", "Savannah", "Forest"};
+	private String[] otherBiomes = {};
+	private static int minSpawnDistance;
 	
 	
 	public GamePanel(int w, int h){
 		setVisible(true);
 		if (mag >= 100) mag = 80;
+		minSpawnDistance = 0;
 		mousePoint = new Point();
 		addMouseListener(this);
 		addMouseMotionListener(this);
@@ -41,6 +46,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 		Timer timer = new Timer(1, this);
 		timer.setInitialDelay(10);
 		setImages();
+		makeTilesReal();
 		setTiles();
 		timer.start();
 		repaint();
@@ -62,15 +68,15 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 		int startCol = screenx/mag;
 		int startRow = screeny/mag;
 		
-		for(int row = startRow; row < height; row++){
-			for(int col = startCol; col < width; col++){
+		for(int row = startRow; row < mapHeight; row++){
+			for(int col = startCol; col < mapWidth; col++){
 				g.drawImage(tiles[row][col].getImage(), (col - startCol) *mag - xextra, (row - startRow)*mag - yextra, mag, mag, null);
 				if((col - startCol) * mag > screenWidth){
-					col = width;
+					col = mapWidth;
 				}
 			}
 			if((row - startRow) * mag > screenHeight){
-				row = height;
+				row = mapHeight;
 			}
 		}
 	}
@@ -85,10 +91,10 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 		}
 	}
 	
-	public void setTiles(){
-		for(int row = 0; row < height; row++){
-			for(int col = 0; col < width; col++){
-				if(row <= 10 || row >= height - 10 || col <= 10 || col >= width - 10){
+	public void makeTilesReal(){
+		for(int row = 0; row < mapHeight; row++){
+			for(int col = 0; col < mapWidth; col++){
+				if(row <= 10 || row >= mapHeight - 10 || col <= 10 || col >= mapWidth - 10){
 					tiles[row][col] = new Tile("Ocean");
 					tiles[row][col].setImage(Ocean);
 				}
@@ -110,6 +116,15 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 				}
 			}
 		}
+	}
+	
+	public void setTiles(){
+		int rowFactor = mapHeight/4;
+		int colFactor = mapWidth/4;
+		tiles[rowFactor][colFactor] = new OriginTile("");
+		tiles[rowFactor*3][colFactor] = new OriginTile("");
+		tiles[rowFactor][colFactor*3] = new OriginTile("");
+		tiles[rowFactor*3][colFactor*3] = new OriginTile("");
 	}
 
 	
@@ -172,15 +187,15 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 			}
 		}
 		if(mousePoint.x > screenWidth - 70){
-			if(screenx <= width*mag - screenWidth - movement) screenx+=movement;
+			if(screenx <= mapWidth*mag - screenWidth - movement) screenx+=movement;
 			else{
-				screenx = width*mag - screenWidth;
+				screenx = mapWidth*mag - screenWidth;
 			}
 		}
 		if(mousePoint.y > screenHeight - 70){
-			if(screeny <= height*mag - screenHeight - movement) screeny+=movement;
+			if(screeny <= mapHeight*mag - screenHeight - movement) screeny+=movement;
 			else{
-				screeny = height*mag - screenHeight ;
+				screeny = mapHeight*mag - screenHeight ;
 			}
 		}
 		repaint();
