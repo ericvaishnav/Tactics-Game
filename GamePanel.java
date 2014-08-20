@@ -17,7 +17,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 	private static Tile[][] tiles = new Tile[mapHeight][mapWidth];
 	public static int screenWidth, screenHeight;
 	private Point mousePoint;
-	private int screenx, screeny, mag = 20;
+	private int screenx, screeny, mag = 20, rr;
 	public static ArrayList<Biome> biomes = new ArrayList<Biome>();
 	private static int numBiomes = 6;
 
@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 		addMouseMotionListener(this);
 		setBackground(Color.WHITE);
 		screenx = 0;
-		screeny = 0;
+		screeny = 1000;
 		screenWidth = w;
 		screenHeight = h;
 		Timer timer = new Timer(1, this);
@@ -74,13 +74,15 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 					endCol = col;
 					col = mapWidth;
 				}
+				else endCol = mapWidth;
 			}
 			if ((row - startRow) * mag > screenHeight) {
 				endRow = row;
 				row = mapHeight;
 			}
+			else endRow = mapHeight;
 		}
-
+		
 		drawMiniMap(g, startCol, startRow, endCol, endRow);
 
 	}
@@ -99,9 +101,9 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 		int miniRow = startRow - ((h/miniSize - rowDif) / 2);
 		int mendCol = endCol + ((w / miniSize - colDif) / 2);
 		int mendRow = endRow + ((h / miniSize - rowDif) / 2);
-		for (int r = miniRow; r < mendRow; r++) {
-			for (int c = miniCol; c < mendCol; c++) {
-				if (r > 0 && c > 0)
+		for (int r = miniRow; r < mendRow+1; r++) {
+			for (int c = miniCol; c < mendCol+1; c++) {
+				if (r >= 0 && c >= 0 && r < mapHeight && c < mapWidth)
 					g.drawImage	(tiles[r][c].getImage(),
 								(c - miniCol) * miniSize + x,
 								(r - miniRow) * miniSize + y,
@@ -198,7 +200,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 
 	@Override
 	public void mousePressed(MouseEvent event) {
-		
+		System.out.println(rr);
 	}
 
 	@Override
