@@ -2,9 +2,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 import javax.swing.JFrame;
 
 @SuppressWarnings("serial")
@@ -15,7 +12,7 @@ public class GameFrame extends JFrame{
 	
 	public GameFrame(){
 		super("The Game");
-		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize((int)screenWidth, (int)screenHeight);
 		final GamePanel panel = new GamePanel(this.getWidth(), this.getHeight());
 		this.addComponentListener(new ComponentAdapter() {
