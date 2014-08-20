@@ -17,7 +17,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 	private static Tile[][] tiles = new Tile[mapHeight][mapWidth];
 	public static int screenWidth, screenHeight;
 	private Point mousePoint;
-	private int screenx, screeny, mag = 20, rr;
+	private int screenx, screeny, mag = 20;
 	public static ArrayList<Biome> biomes = new ArrayList<Biome>();
 	private static int numBiomes = 6;
 
@@ -200,7 +200,7 @@ public class GamePanel extends JPanel implements MouseListener, MouseMotionListe
 
 	@Override
 	public void mousePressed(MouseEvent event) {
-		System.out.println(rr);
+		
 	}
 
 	@Override
